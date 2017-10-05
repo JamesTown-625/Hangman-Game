@@ -4,17 +4,17 @@
 // 	array with words to be guessed as well as other variables to be used in game.  
 
 	var gameWord = ["drpepper", "rootbeer", "coke", "creamsoda", "gingerale", "mountaindew"];
-	var compWord = "";
-	var lettersinWord = [];
-	var numBlanks = 0;
-	var blanks = []; // d_ _ _ _ _ _ _
+	var compWord = ""; // blank array to hold the word
+	var lettersinWord = []; //
+	var numBlanks = 0; 
+	var blanks = []; // holds blanks and successful guesses
 	var wrongLetters = [];
 
 //	Game Counters
 
 	var guessesLeft = 10;
-	var wins = 0;
-	var losses = 0;
+	var winCount = 0;
+	var lossCount = 0;
 
 // FUNCTIONS (Reusable blocks of code that I will call upon when needed)
 // =========================================================================================================
@@ -35,18 +35,97 @@ function startGame () {
 	}
 
 	//	Change HTML to reflect round conditions.
-	
-
+	document.getElementById("wordToGuess").innerHTML = blanks.join("  ");
+	document.getElementById("numGuesses").innerHTML = guessesLeft;
+	document.getElementById("winCounter").innerHTML = winCount;
+	document.getElementById("lossCounter").innerHTML = lossCount;
 	// Testing / Debugging
 	console.log(compWord);
 	console.log(lettersinWord);
 	console.log(numBlanks);
 	console.log(blanks);
 }
+
+function checkLetters(letter) {
+	//Check if letter if letter exists in code at all
+
+	var isLetterInWord = false;
+	for (var i=0; i<numBlanks; i++) {
+		if(compWord[i] == letter) {
+			isLetterInWord = true;
+
+		}
+	}
+
+	// Check where in the word the Letter exists, then populate the blanks array.
+	if(isLetterInWord) {
+		for (var i=0; i<numBlanks; i++) {
+			if(compWord[i] == letter) {
+				blanks[i] = letter;
+			}
+		}
+	}
+	//letter wasn't found
+	else {
+		wrongLetters.push(letter);
+		guessesLeft--
+	}
+
+	// Testing and Debugging
+	console.log(blanks);
+
+}
+
+function roundComplete() {
+	console.log("Win Count: " + winCount + " | Loss Count: " + " | Guesses Left: " + numGuesses);
+
+	//Update the HTML to reflect the most recent information
+	document.getElementById("numGuesses").innerHTML = guessesLeft;
+	document.getElementById("wordToGuess").innerHTML = blanks.join(" ");
+	document.getElementById("wrongGuesses").innerHTML = wrongLetters.join(" ");
+
+
+	//Check if the User won.
+	if (lettersinWord.toString() == blanks.toString()) {
+		winCount++;
+		alert("You Won!");
+
+		//Update the win Counter in the HTML
+		document.getElementById("winCounter").innerHTML = winCount;
+
+
+		startGame();
+	}
+
+	else if (guessesLeft == 0) {
+		lossCount++;
+		alert("You Lost!");
+
+		//Update the HTML
+		document.getElementById("lossCounter").innerHTML = lossCount;
+
+		startGame();
+	}
+}
+
+
 // MAIN PROCESS 
 // =========================================================================================================
 
-startGame();
+startGame(); // Have to call this in order for the startGame function to work.
+
+// Register Key Clicks
+document.onkeyup = function(event) {
+	var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+	checkLetters(letterGuessed);
+	roundComplete();
+
+	//Testing and Debugging
+	console.log(letterGuessed);
+
+} 
+
+
 
 // //	userGuess variable on keyup event. 
 // 	document.onkeyup = function() {
