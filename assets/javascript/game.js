@@ -30,7 +30,7 @@ function startGame () {
 	blanks = [];
 
 	//	Populate blanks and Successes with the right number of blanks.
-	for (var i=0; i < numBlanks; i++) {
+	for (var i=0; i<numBlanks; i++) {
 		blanks.push("_"); // .push method adds a new item to an Array.
 	}
 
@@ -39,6 +39,8 @@ function startGame () {
 	document.getElementById("numGuesses").innerHTML = guessesLeft;
 	document.getElementById("winCounter").innerHTML = winCount;
 	document.getElementById("lossCounter").innerHTML = lossCount;
+	document.getElementById("youWon").innerHTML = " ";
+	document.getElementById("wrongGuesses").innerHTML = " ";
 	// Testing / Debugging
 	console.log(compWord);
 	console.log(lettersinWord);
@@ -47,7 +49,7 @@ function startGame () {
 }
 
 function checkLetters(letter) {
-	//Check if letter if letter exists in code at all
+	//Check if letter exists in code at all
 
 	var isLetterInWord = false;
 	for (var i=0; i<numBlanks; i++) {
@@ -68,37 +70,40 @@ function checkLetters(letter) {
 	//letter wasn't found
 	else {
 		wrongLetters.push(letter);
-		guessesLeft--
+		guessesLeft--;
 	}
 
 	// Testing and Debugging
-	console.log(blanks);
+	document.getElementById("wordToGuess").innerHTML = blanks.join(" ");
 
 }
 
 function roundComplete() {
-	console.log("Win Count: " + winCount + " | Loss Count: " + " | Guesses Left: " + numGuesses);
+	console.log("Win Count: " + winCount + " | Loss Count: " + lossCount + " | Guesses Left: " + numGuesses);
 
 	//Update the HTML to reflect the most recent information
 	document.getElementById("numGuesses").innerHTML = guessesLeft;
-	document.getElementById("wordToGuess").innerHTML = blanks.join(" ");
-	document.getElementById("wrongGuesses").innerHTML = wrongLetters.join(" ");
+	// document.getElementById("wordToGuess").innerHTML = blanks.join(" ");
+	document.getElementById("wrongGuesses").innerHTML = wrongLetters.join("");
 
 
 	//Check if the User won.
 	if (lettersinWord.toString() == blanks.toString()) {
+		console.log("run dangit")
 		winCount++;
-		alert("You Won!");
-
-		//Update the win Counter in the HTML
+		
+		document.getElementById("wordToGuess").innerHTML = blanks.join(" ");
+		
+		//Update the win Counner in the HTML
 		document.getElementById("winCounter").innerHTML = winCount;
 
-
-		startGame();
+		setTimeout(startGame, 1500);
+		document.getElementById("youWon").innerHTML = "YOU WON HOMIE!";
 	}
 
 	else if (guessesLeft == 0) {
 		lossCount++;
+		document.getElementById("wordToGuess").innerHTML = blanks;
 		alert("You Lost!");
 
 		//Update the HTML
@@ -114,6 +119,7 @@ function roundComplete() {
 
 startGame(); // Have to call this in order for the startGame function to work.
 
+
 // Register Key Clicks
 document.onkeyup = function(event) {
 	var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
@@ -127,27 +133,8 @@ document.onkeyup = function(event) {
 
 
 
-// //	userGuess variable on keyup event. 
-// 	document.onkeyup = function() {
-// 		var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
-// 			console.log(userGuess);
-		
-
-		//	letters already guessed counter, Wins counter, Loses counter, and Remaining Guesses counter.
-	// var html = "<h1>Hangman Game!</h1>" +
-	// "<h2>Type any key to begin guessing the word! Choose wisely, you only have" + guessesRemaining +  "guesses.</h2>" +
-	// 	"<p> Wins: " + wins + "</p>" +
-	// 	"<p> Loses: " + losses + "</p>" +
-	// 	"<p> Letters already guessed: " + alreadyGuessed + "</p>" +
-	// 	"<p> You have " + guessesRemaining + " remaining!</p>";
-
-	// 		document.querySelector('#hangmanGame').innerHTML = html;
-	
-	// 	}
 
 
-
-// 	number of userguesses counter that counts down as userguesses goes up
 
 
 
